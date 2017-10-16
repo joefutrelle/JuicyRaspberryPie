@@ -181,6 +181,9 @@ class Minecraft:
 
     def createExplosion(self, *args):
         self.conn.send("world.createExplosion", intFloor(args))
+
+    def generateTree(self, *args):
+        self.conn.send("world.generateTree", intFloor(args))
         
     def getPlayerEntityIds(self):
         """Get the entity ids of the connected players => [id:int]"""

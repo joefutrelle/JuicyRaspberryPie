@@ -255,3 +255,17 @@ def flood(size=10, block=blocks.WATER):
                 j = heights[n]
                 mc.setBlock(i, j+1, k, block)
                 n += 1
+
+def blam(power=4):
+    "_mcp: create explosion (without tnt)"
+    power = int(power)
+    with exc_chat() as mc:
+        x, y, z = playerPos(mc.player)
+        mc.createExplosion(x, y, z, power)
+
+def tree():
+    "_mcp: generate tree"
+    with exc_chat() as mc:
+        x, y, z = playerPos(mc.player)
+        mc.setBlock(x, y-1, z, blocks.GRASS)
+        mc.generateTree(x, y, z)

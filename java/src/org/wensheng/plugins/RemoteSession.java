@@ -164,8 +164,13 @@ public class RemoteSession {
 	    } else if (c.equals("world.createExplosion")) {
 		Location loc = parseRelativeBlockLocation(args[0], args[1], args[2]);
 		int power = args.length > 3 ? Integer.parseInt(args[3]) : 4;
-		world.createExplosion(loc, (float) power); // TNT strength
-		
+		world.createExplosion(loc, (float) power);
+
+	    } else if (c.equals("world.generateTree")) {
+		Location loc = parseRelativeBlockLocation(args[0], args[1], args[2]);
+		//world.generateTree(loc, TreeType.valueOf(args[3]));
+		world.generateTree(loc, TreeType.TREE);
+		    
             // world.getPlayerIds
             } else if (c.equals("world.getPlayerIds")) {
                 StringBuilder bdr = new StringBuilder();
