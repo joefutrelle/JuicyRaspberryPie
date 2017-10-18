@@ -2,7 +2,7 @@ from contextlib import contextmanager
 from traceback import format_exc
 import re
 
-from pplugins import blocks
+from pplugins import blocks, trees
 
 from mcpi.minecraft import Minecraft
 
@@ -18,6 +18,18 @@ def block_by_name(name):
         except AttributeError:
             pass
     raise ValueError('no such block')
+
+def tree_by_name(name):
+    try:
+        return int(name)
+    except ValueError:
+        pass
+    name = name.upper()
+    try:
+        return getattr(trees, name)
+    except AttributeError:
+        pass
+    raise ValueError('no such tree')
 
 def playerPos(player):
     pos = player.getTilePos()

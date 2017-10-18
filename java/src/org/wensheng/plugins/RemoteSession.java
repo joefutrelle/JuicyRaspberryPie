@@ -168,9 +168,12 @@ public class RemoteSession {
 
 	    } else if (c.equals("world.generateTree")) {
 		Location loc = parseRelativeBlockLocation(args[0], args[1], args[2]);
-		//world.generateTree(loc, TreeType.valueOf(args[3]));
-		world.generateTree(loc, TreeType.TREE);
-		    
+		
+		int ordinal = Integer.parseInt(args[3]);
+		TreeType treeType = TreeType.values()[ordinal];
+
+		world.generateTree(loc, treeType);
+
             // world.getPlayerIds
             } else if (c.equals("world.getPlayerIds")) {
                 StringBuilder bdr = new StringBuilder();
@@ -309,7 +312,18 @@ public class RemoteSession {
                 }
                 Player currentPlayer = getCurrentPlayer(name);
                 send(currentPlayer.getLocation().getPitch());
-                
+
+	    } else if (c.equals("player.setFlySpeed")) {
+		float speed = Float.parseFloat(args[0]);
+                String name = null;
+                if (args.length > 1) {
+                    name = args[1];
+                }
+                Player currentPlayer = getCurrentPlayer(name);
+		currentPlayer.setFlySpeed(speed);
+
+		plugin.getLogger().info("set fly speed to "+speed);
+		
             // world.getHeight
             } else if (c.equals("world.getHeight")) {
                 send(world.getHighestBlockYAt(parseRelativeBlockLocation(args[0], "0", args[1])) - origin.getBlockY());

@@ -184,6 +184,9 @@ class Minecraft:
 
     def generateTree(self, *args):
         self.conn.send("world.generateTree", intFloor(args))
+
+    def setFlySpeed(self, *args):
+        self.conn.send("player.setFlySpeed", *args)
         
     def getPlayerEntityIds(self):
         """Get the entity ids of the connected players => [id:int]"""

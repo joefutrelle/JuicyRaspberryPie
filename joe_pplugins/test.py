@@ -6,8 +6,8 @@
 
 #For example, you define 2 functions: hi and blk as follow:
 
-from pplugins import blocks
-from pplugins.utils import block_by_name, exc_chat, playerPos
+from pplugins import blocks, trees
+from pplugins.utils import block_by_name, exc_chat, playerPos, tree_by_name
 
 from math import sqrt
 
@@ -263,9 +263,48 @@ def blam(power=4):
         x, y, z = playerPos(mc.player)
         mc.createExplosion(x, y, z, power)
 
-def tree():
+def generate_tree(x, y, z, kind):
+    with exc_chat() as mc:
+        old_value = mc.getBlock(x, y-1, z)
+        mc.setBlock(x, y-1, z, blocks.GRASS)
+        mc.generateTree(x, y, z, kind)
+        mc.setBlock(x, y-1, z, old_value)
+    
+def tree(kind=trees.TREE):
     "_mcp: generate tree"
     with exc_chat() as mc:
+        kind = tree_by_name(kind)
         x, y, z = playerPos(mc.player)
-        mc.setBlock(x, y-1, z, blocks.GRASS)
-        mc.generateTree(x, y, z)
+        generate_tree(x, y, z, kind)
+
+def grove(n=20, far=20, kind=trees.TREE):
+    "_mcp: generate grove of trees"
+    with exc_chat() as mc:
+        n = int(n)
+        far = int(far)
+        kind = tree_by_name(kind)
+        i, j, k = playerPos(mc.player)
+        x, y, z = [], [], []
+        for m in range(n):
+            xm = random.randint(i-far,i+far)
+            zm = random.randint(k-far,k+far)
+            x.append(xm)
+            z.append(zm)
+            y.append(mc.getHeight(xm,zm))
+        for m in range(n):
+            generate_tree(x[m], y[m], z[m], kind)
+        
+def treelist():
+    "_mcp: list kinds of trees"
+    with exc_chat() as mc:
+        value = {}
+        for k in trees.__dict__:
+            if not k.startswith('__'):
+                value[k.lower()] = getattr(trees, k)
+        ks = sorted(value.keys(), key=lambda k: value[k])
+        mc.postToChat(' '.join(ks))
+
+def setflyspeed(fs=0.1):
+    "_mcp: set fly speed"
+    with exc_chat() as mc:
+        mc.setFlySpeed(fs)
