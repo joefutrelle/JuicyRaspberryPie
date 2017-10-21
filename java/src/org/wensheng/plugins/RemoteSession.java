@@ -326,9 +326,26 @@ public class RemoteSession {
 		
             // world.getHeight
             } else if (c.equals("world.getHeight")) {
-                send(world.getHighestBlockYAt(parseRelativeBlockLocation(args[0], "0", args[1])) - origin.getBlockY());
-                
-            // entity.getTile
+		send(world.getHighestBlockYAt(parseRelativeBlockLocation(args[0], "0", args[1])) - origin.getBlockY());
+
+	    } else if (c.equals("world.getDepth")) {
+		Location start = parseRelativeBlockLocation(args[0], "0", args[1]);
+		int x = start.getBlockX();
+		int z = start.getBlockZ();
+		int y = world.getHighestBlockYAt(start);
+		for(; y >= -1; y--) {
+		    if(y == -1) { // off the bottom of the world
+			send(0 - origin.getBlockY());
+			break;
+		    }
+		    int blockType = world.getBlockTypeIdAt(x, y, z); // deprecated
+		    if(blockType != 9 && blockType != 0) { // water, air
+			send(y - origin.getBlockY());
+			break;
+		    }
+		}
+		
+	    // entity.getTile
             } else if (c.equals("entity.getTile")) {
                 //get entity based on id
                 //EntityLiving entity = plugin.getEntityLiving(Integer.parseInt(args[0]));

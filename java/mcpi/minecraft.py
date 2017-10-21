@@ -179,6 +179,9 @@ class Minecraft:
         """Get the height of the world (x,z) => int"""
         return int(self.conn.sendReceive("world.getHeight", intFloor(args)))
 
+    def getDepth(self, *args):
+        return int(self.conn.sendReceive("world.getDepth", intFloor(args)))
+    
     def createExplosion(self, *args):
         self.conn.send("world.createExplosion", intFloor(args))
 
