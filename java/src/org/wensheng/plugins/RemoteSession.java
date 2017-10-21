@@ -333,13 +333,13 @@ public class RemoteSession {
 		int x = start.getBlockX();
 		int z = start.getBlockZ();
 		int y = world.getHighestBlockYAt(start);
-		for(; y >= -1; y--) {
-		    if(y == -1) { // off the bottom of the world
+		while(true) {
+		    if(y-- == -1) { // off the bottom of the world
 			send(0 - origin.getBlockY());
 			break;
 		    }
-		    int blockType = world.getBlockTypeIdAt(x, y, z); // deprecated
-		    if(blockType != 9 && blockType != 0) { // water, air
+		    Material m = world.getBlockAt(x, y, z).getType();
+		    if(m != Material.STATIONARY_WATER && m != Material.AIR) {
 			send(y - origin.getBlockY());
 			break;
 		    }
